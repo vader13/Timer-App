@@ -1,0 +1,54 @@
+import React, { useState, useEffect } from "react";
+import Timer from "./Timer"
+import "./App.css";
+
+function App() {
+  const [exerciseTime, setExerciseTime] = useState(3);
+  const [pauseTime, setPauseTime] = useState(10);
+  const [isTrainingInProgress, setIsTrainingInProgress] = useState(false);
+  const [isPauseInProgress, setIsPauseInProgress] = useState(false);
+
+  function ChangeExercise(e) {
+    const { value } = e.target;
+    setExerciseTime(value);
+  }
+
+  function ChangePause(e) {
+    const { value } = e.target;
+    setPauseTime(value);
+  }
+
+  useEffect(() => {
+    if (exerciseTime > 0 && isTrainingInProgress === true) {
+      setTimeout(() => {
+        setExerciseTime(time => time - 1);
+      }, 1000);
+    } else if (exerciseTime === 0) {
+      setIsTrainingInProgress(false);
+    }
+  }, [exerciseTime, isTrainingInProgress]);
+
+  useEffect(() => {
+    if (pauseTime > 0 && isPauseInProgress === true) {
+      setTimeout(() => {
+        setPauseTime(time => time - 1);
+      }, 1000);
+    } else if (pauseTime === 0) {
+      setIsPauseInProgress(false);
+    }
+  }, [pauseTime, isPauseInProgress]);
+
+  return (
+    <div>
+
+      <label>Set Pause time </label>
+      <input type="number" onChange={ChangePause} min="0"></input>
+      <h2>Time Remaining for the Pause: {pauseTime}</h2>
+      <button onClick={() => setIsTrainingInProgress(true)}>
+        start Exercise
+      </button>
+      <button onClick={() => setIsPauseInProgress(true)}>start Pause</button>
+    </div>
+  );
+}
+export default App;
